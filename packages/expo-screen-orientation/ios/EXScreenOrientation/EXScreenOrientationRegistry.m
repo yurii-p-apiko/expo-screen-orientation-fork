@@ -73,7 +73,8 @@ EX_REGISTER_SINGLETON_MODULE(ScreenOrientationRegistry)
 - (void)enforceDesiredDeviceOrientationWithOrientationMask:(UIInterfaceOrientationMask)orientationMask
 {
   // if current sreen orientation isn't part of the mask, we have to change orientation to default one included in mask, in order up-left-right-down
-  if (![EXScreenOrientationUtilities doesOrientationMask:orientationMask containOrientation:_currentScreenOrientation]) {
+  // Added iOS 16 check as a temp solution
+  if (![EXScreenOrientationUtilities doesOrientationMask:orientationMask containOrientation:_currentScreenOrientation]  || [[[UIDevice currentDevice] systemVersion] floatValue] >= 16.0) {
     __block UIInterfaceOrientation newOrientation = [EXScreenOrientationUtilities defaultOrientationForOrientationMask:orientationMask];
     if (newOrientation != UIInterfaceOrientationUnknown) {
       EX_WEAKIFY(self)
